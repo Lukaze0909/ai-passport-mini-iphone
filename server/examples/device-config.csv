@@ -1,0 +1,11 @@
+key,type,encoding,value
+net,namespace,,
+ssid0,data,string,YOUR_HOME_WIFI
+pass0,data,string,YOUR_HOME_WIFI_PASSWORD
+ssid1,data,string,YOUR_PHONE_HOTSPOT
+pass1,data,string,YOUR_HOTSPOT_PASSWORD
+mqtt_uri,data,string,mqtts://broker.example.com:8883
+mqtt_user,data,string,passport-device
+mqtt_pass,data,string,YOUR_MQTT_PASSWORD
+classic,namespace,,
+wifi,data,u8,1

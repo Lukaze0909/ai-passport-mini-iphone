@@ -14,3 +14,8 @@ managed_components/
 
 # Python bytecode (asset generators)
 __pycache__/
+
+# Device network config: contains plaintext passwords
+device-config.csv
+device-nvs.bin
+!server/examples/device-config.csv
