@@ -53,6 +53,8 @@ typedef struct {
 static item_t s_items[MAX_ITEMS];
 static int s_count;
 static bool s_open, s_new;               // app open / on the NEW page
+static bool s_detail;                    // reading the memo at s_cursor in full
+static char s_detail_text[CS_MEMO_TEXT_MAX + 1];
 static int s_cursor = -1;                // LIST: -1 = "+", else item index
 static uint8_t s_focus;                  // NEW: 0 mic, 1 send, 2 trash
 static uint8_t s_state;                  // NEW: cs_memo_state_t (own states; REC / TAKE from cs_call)
@@ -209,6 +211,31 @@ static void list_show(void) {
     cs_ui_notes_update(&s_nv);
 }
 
+// DETAIL: the whole memo at s_cursor; the list row cuts it to one line.
+static void detail_show(void) {
+    if (s_cursor < 0 || s_cursor >= s_count) {
+        s_detail = false;
+        return;
+    }
+    xSemaphoreTake(s_mtx, portMAX_DELAY);
+    if (!cs_store_get(&s_store, s_items[s_cursor].rec, &s_tmp)) s_tmp.text[0] = '\0';
+    size_t k = 0;
+    while (k < CS_MEMO_TEXT_MAX && s_tmp.text[k]) {
+        s_detail_text[k] = s_tmp.text[k];
+        k++;
+    }
+    s_detail_text[k] = 0;
+    xSemaphoreGive(s_mtx);
+    cs_memo_view_t v;
+    memset(&v, 0, sizeof v);
+    v.state = CS_MEMO_PREVIEW;
+    v.text = s_detail_text;
+    v.detail = true;
+    v.done = s_items[s_cursor].done != 0;
+    snprintf(v.status, sizeof v.status, "%s", v.done ? "已完成 · 确定 取消 · 长按返回" : "确定 打勾 · 长按返回");
+    cs_ui_memo_update(&v);
+}
+
 // NEW state, with recording / take coming from the shared voice take.
 static uint8_t new_state(void) {
     const cs_rec_state_t r = cs_call_rec_state();
@@ -250,12 +277,13 @@ static void show(cs_screen_t want, bool lvgl_held) {
     if (!lvgl_held && !bsp_lvgl_lock(500)) return;
     if (cs_ui_current() != want) cs_ui_show(want);
     if (want == CS_SCR_NOTES) list_show();
+    else if (s_detail) detail_show();
     else new_show();
     if (!lvgl_held) bsp_lvgl_unlock();
 }
 
 static void refresh(void) {
-    if (s_open) show(s_new ? CS_SCR_MEMO : CS_SCR_NOTES, false);
+    if (s_open) show(s_new || s_detail ? CS_SCR_MEMO : CS_SCR_NOTES, false);
 }
 
 static void tap(void) { rg_app_sound(RG_SOUND_TAP); }
@@ -264,6 +292,7 @@ static void tap(void) { rg_app_sound(RG_SOUND_TAP); }
 void cs_memos_enter(void) {
     s_open = true;
     s_new = false;
+    s_detail = false;
     list_build();
     s_cursor = s_count > 0 ? 0 : -1;
     show(CS_SCR_NOTES, true);
@@ -279,11 +308,18 @@ static void new_reset(void) {
 void cs_memos_exit(void) {
     s_open = false;
     s_new = false;
+    s_detail = false;
     cs_call_rec_abandon();
     new_reset();
 }
 
 bool cs_memos_back(void) {
+    if (s_open && s_detail) {
+        s_detail = false;
+        list_build();
+        refresh();
+        return true;
+    }
     if (!s_open || !s_new) return false;
     cs_call_rec_abandon();
     new_reset();
@@ -332,6 +368,23 @@ static void list_key(uint8_t btn) {
         s_new = true;
         new_reset();
         rg_app_sound(RG_SOUND_CONFIRM);
+    } else {
+        s_detail = true;
+        rg_app_sound(RG_SOUND_CONFIRM);
+    }
+}
+
+static void detail_key(uint8_t btn) {
+    if (btn == BSP_BTN_UP) {
+        if (s_cursor > 0) {
+            s_cursor--;
+            tap();
+        }
+    } else if (btn == BSP_BTN_DOWN) {
+        if (s_cursor + 1 < s_count) {
+            s_cursor++;
+            tap();
+        }
     } else {
         toggle(s_cursor);
         tap();
@@ -399,6 +452,7 @@ static void new_key(uint8_t btn) {
 void cs_memos_key(uint8_t btn) {
     if (!s_open) return;
     if (s_new) new_key(btn);
+    else if (s_detail) detail_key(btn);
     else list_key(btn);
     refresh();
 }

@@ -128,8 +128,10 @@ typedef struct {
     uint8_t state;          // cs_memo_state_t
     uint8_t focus;          // 0 mic, 1 send, 2 trash
     uint8_t enabled;        // bit i: button i usable
-    const char *text;       // preview text (CS_MEMO_PREVIEW)
+    const char *text;       // preview text (CS_MEMO_PREVIEW), or the memo in detail
     char status[96];
+    bool detail;            // reading a saved memo: no buttons, title "Memo"
+    bool done;              // detail: the memo is checked
 } cs_memo_view_t;
 void cs_ui_memo_update(const cs_memo_view_t *v);
 

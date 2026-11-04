@@ -51,7 +51,7 @@ enum {   // indices into s_o, reused per screen
     CALL_STATUS = 0, CALL_OVL0 = 1, CALL_IMG0 = 7, CALL_DOT = 12, CALL_RING = 13,
     MSG_AREA = 0, MSG_MORE, MSG_STATUS, MSG_BTN0,   // 3 buttons
     NOTE_TITLE = 0, NOTE_PLUS, NOTE_HL, NOTE_TXT0, NOTE_CHK0 = NOTE_TXT0 + CS_NOTES_ROWS,   // list
-    MEMO_PAGE = 0, MEMO_STATUS, MEMO_BTN0,                                                   // new (3 buttons)
+    MEMO_PAGE = 0, MEMO_STATUS, MEMO_TITLE, MEMO_BTN0,                                                   // new (3 buttons)
     MN_TITLE = 0, MN_TITLE_SH, MN_SIZE, MN_BODY,                      // mines: chrome
     MN_SCORE, MN_SET_V0, MN_SET_V1, MN_SET_START, MN_SET_RING,        //   body: setup card
     MN_RING = MN_SCORE, MN_NOTE, MN_STATUS, MN_BTN0, MN_BTN1,         //   body: board
@@ -976,7 +976,7 @@ void cs_ui_notes_update(const cs_notes_view_t *v) {
 }
 
 static void memo_build(void) {
-    (void)notes_chrome("New Memo");
+    s_o[MEMO_TITLE] = notes_chrome("New Memo");
     lv_obj_t *page = label_left(s_scr, &cs_font14, NOTE_INK, NOTE_TEXT_X, NOTE_TOP + 20);
     lv_obj_set_width(page, 194);
     lv_label_set_long_mode(page, LV_LABEL_LONG_MODE_WRAP);
@@ -999,6 +999,8 @@ static void memo_build(void) {
 void cs_ui_memo_update(const cs_memo_view_t *v) {
     if (s_cur != CS_SCR_MEMO || !s_o[MEMO_PAGE]) return;
     lv_obj_t *page = s_o[MEMO_PAGE];
+    set_text(s_o[MEMO_TITLE], v->detail ? "Memo" : "New Memo");
+    lv_obj_set_style_text_color(page, hex(v->detail && v->done ? NOTE_INK_DONE : NOTE_INK), 0);
     const bool big = v->state == CS_MEMO_WAIT || v->state == CS_MEMO_FAIL;
     lv_obj_set_style_text_font(page, big ? &cs_font18 : &cs_font14, 0);
     set_text(page, v->state == CS_MEMO_PREVIEW ? v->text : v->state == CS_MEMO_WAIT ? "…"
@@ -1007,6 +1009,7 @@ void cs_ui_memo_update(const cs_memo_view_t *v) {
     for (int i = 0; i < 3; i++) {
         lv_obj_t *btn = s_o[MEMO_BTN0 + i];
         lv_obj_t *img = lv_obj_get_child(btn, 0);
+        show(btn, !v->detail);
         const bool en = (v->enabled >> i) & 1;
         const bool rec = i == 0 && v->state == CS_MEMO_REC;
         const bool foc = en && i == v->focus;
