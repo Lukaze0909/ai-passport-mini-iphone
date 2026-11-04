@@ -84,7 +84,7 @@ scope and compatibility.
 
 ## Licensing of contributions
 
-This repository is licensed under [MIT](/LICENSE). By contributing, you agree that
+This repository uses several licenses, see [NOTICE.md](/NOTICE.md). By contributing, you agree that
 your contribution is submitted under the MIT license terms of the repository.
 
 ## Security issues

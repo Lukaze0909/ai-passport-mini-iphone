@@ -70,7 +70,7 @@ cc -std=c11 -Wall -Wextra -Werror -Imain \
 
 ## 贡献的许可
 
-本仓库使用 [MIT](/LICENSE) 许可证。提交贡献即表示你同意按本仓库的 MIT 条款并入你的贡献。
+本仓库使用多种许可证，见 [NOTICE.md](/NOTICE.md)。提交贡献即表示你同意按本仓库的 MIT 条款并入你的贡献。
 
 ## 安全漏洞
 

@@ -60,7 +60,7 @@ idf.py -p <端口> flash
 
 ## 许可证
 
-- 上游 FoloToy 的代码：MIT（见 `LICENSE`）
+- 上游 FoloToy 的代码：MIT（见 `LICENSE-FoloToy-MIT.txt`）
 - 本项目新增的代码：PolyForm Noncommercial 1.0.0
 - 文档和原创素材：CC BY-NC-SA 4.0
 - 字体：Noto Sans CJK、霞鹜文楷（SIL OFL 1.1）；符号字形来自 DejaVu Sans

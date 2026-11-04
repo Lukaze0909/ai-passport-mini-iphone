@@ -10,7 +10,7 @@ Required Notice: Copyright (c) 2026 Kahze & Wren
 ## 1. Upstream FoloToy code: MIT
 
 Files that came from FoloToy/ai-passport, and our modifications to those files, stay under the
-upstream MIT License. Its text is in [`LICENSE`](LICENSE) and must be kept with them.
+upstream MIT License. Its text is in [`LICENSE-FoloToy-MIT.txt`](LICENSE-FoloToy-MIT.txt) and must be kept with them.
 
 ## 2. New code: PolyForm Noncommercial 1.0.0
 
