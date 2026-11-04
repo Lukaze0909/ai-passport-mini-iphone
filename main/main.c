@@ -14,6 +14,13 @@
 #include "demo_navigation.h"
 #include "ui_pixel.h"
 #include "lvgl.h"
+#include "sdkconfig.h"
+#if CONFIG_CS_SHELL_ENABLE
+#include "cs_shell.h"
+#endif
+#if CONFIG_RG_APP_ENABLE
+#include "rg_app.h"
+#endif
 #include "esp_log.h"
 #include "esp_sleep.h"
 #include "freertos/FreeRTOS.h"
@@ -209,6 +216,23 @@ void app_main(void) {
         return;
     }
     bsp_display_backlight(100);
+
+#if CONFIG_CS_SHELL_ENABLE
+    // Classic system shell: lock / home / apps; release guidance runs inside it.
+    esp_err_t cs_err = cs_shell_start();
+    if (cs_err != ESP_OK) {
+        ESP_LOGE(TAG, "经典系统启动失败: %s", esp_err_to_name(cs_err));
+    }
+    return;
+#elif CONFIG_RG_APP_ENABLE
+    // Derivative application: Release Guidance owns buttons, audio and the
+    // screen; the BSP test menu below is not started.
+    esp_err_t rg_err = rg_app_start();
+    if (rg_err != ESP_OK) {
+        ESP_LOGE(TAG, "释放引导启动失败: %s", esp_err_to_name(rg_err));
+    }
+    return;
+#endif
 
     demo_navigation_init(&s_navigation, DEMO_COUNT);
 

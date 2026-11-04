@@ -1,4 +1,8 @@
 # Name,   Type, SubType, Offset,   Size,     Flags
 nvs,      data, nvs,     0x9000,   0x6000,
 phy_init, data, phy,     0xf000,   0x1000,
-factory,  app,  factory, 0x10000,  0x7f0000,
+factory,  app,  factory, 0x10000,  0x7d8000,
+# Classic shell Notes (memos) log (main/classic/cs_memos.c): 8 x 4 KB, raw records.
+memos,    data, 0x41,    0x7e8000, 0x8000,
+# Classic shell Messages log (main/classic/cs_msgs.c): 16 x 4 KB, raw records.
+msgs,     data, 0x40,    0x7f0000, 0x10000,

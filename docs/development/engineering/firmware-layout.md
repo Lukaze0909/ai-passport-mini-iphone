@@ -6,7 +6,10 @@
 
 This repository is a minimal base for user-defined firmware targeting an
 ESP32-C3 with 8 MB Flash. Its default does not reserve product-specific
-identity, OTA, or unused data partitions.
+identity, OTA, or unused data partitions. The classic shell branch adds two
+data partitions at the end of Flash (32 KB Notes memos, 64 KB Messages
+history); a device flashed with an older table still runs the same
+application and keeps those in RAM only.
 
 ## Default layout
 
@@ -16,7 +19,9 @@ The default partition table contains exactly:
 | --- | --- | ---: | ---: | --- |
 | `nvs` | data/NVS | `0x9000` | `0x6000` | ESP-IDF and application key-value storage |
 | `phy_init` | data/PHY | `0xF000` | `0x1000` | PHY initialization data |
-| `factory` | app/factory | `0x10000` | `0x7F0000` | The single application image; all remaining Flash |
+| `factory` | app/factory | `0x10000` | `0x7D8000` | The single application image |
+| `memos` | data/`0x41` | `0x7E8000` | `0x8000` | Classic shell Notes memos (same record format, `main/classic/cs_memos.c`) |
+| `msgs` | data/`0x40` | `0x7F0000` | `0x10000` | Classic shell Messages log (raw 4 KB-sector records, `main/classic/cs_msgs.c`) |
 
 The default has no OTA slots. This is a starting point, not a restriction on
 user firmware.

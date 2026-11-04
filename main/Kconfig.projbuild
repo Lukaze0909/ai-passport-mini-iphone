@@ -1,0 +1,74 @@
+menu "Classic shell (经典系统)"
+
+config CS_SHELL_ENABLE
+    bool "Boot into the classic system shell (lock, home, apps)"
+    depends on RG_APP_ENABLE
+    default y
+    help
+        Early-2010s style phone shell: lock screen, home grid, settings with
+        Wi-Fi / SNTP / MQTT, pomodoro, weather and the call app. Release
+        guidance runs inside it as the 释放 app. Disable to boot straight into
+        release guidance as before.
+
+config CS_COMPANION_NAME
+    string "Companion name"
+    depends on CS_SHELL_ENABLE
+    default "Claude"
+    help
+        Name of the agent on the other end of the MQTT link, shown in the
+        status bar, the call and Messages screens, Settings, Mines, Bingo and
+        the astro dice. Drawn at runtime, so changing it needs no asset
+        regeneration. Keep it short (about 6 Latin letters fit the status bar;
+        longer names are clipped there). Non-ASCII characters must be in GB2312
+        to be covered by the bundled fonts.
+
+endmenu
+
+menu "Release Guidance (释放引导)"
+
+config RG_APP_ENABLE
+    bool "Boot into the Release Guidance app instead of the BSP test menu"
+    default y
+    help
+        The derivative application replaces the baseline hardware-test menu.
+        Disable to get the original BSP demo menu back.
+
+config RG_FX_ENABLE
+    bool "Animated sky (drifting clouds, twinkling stars, weather)"
+    depends on RG_APP_ENABLE
+    default y
+    help
+        One LVGL timer at 12.5 fps. Disable for a static sky if rendering
+        load or power draw turns out too high on the device.
+
+config RG_RAIN_DROPS
+    int "Rain drops in the rain weather"
+    depends on RG_FX_ENABLE
+    range 0 32
+    default 16
+    help
+        Rain is the most expensive weather. Each drop invalidates two small
+        rectangles per frame; keep the total under LVGL's 32 invalid areas.
+
+config RG_LEAVES
+    int "Falling leaves in the leaves weather"
+    depends on RG_FX_ENABLE
+    range 0 6
+    default 4
+
+config RG_PAGE_FADE_MS
+    int "Page fade-in time in ms (0 = direct cut)"
+    depends on RG_APP_ENABLE
+    range 0 0
+    default 0
+    help
+        Disabled: a full-screen opa fade needs an ARGB layer that does not fit
+        the LVGL pool. Kept only so old sdkconfig files still parse.
+
+config RG_SOUND_VOLUME
+    int "Key sound volume (0-100)"
+    depends on RG_APP_ENABLE
+    range 0 100
+    default 60
+
+endmenu

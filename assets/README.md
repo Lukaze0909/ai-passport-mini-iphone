@@ -17,6 +17,10 @@ Store reusable font files and generated font sources in `fonts/`.
 - Check Flash and internal-RAM impact before adding a font; the ESP32-C3 has no PSRAM.
 - Do not commit fonts whose license does not permit redistribution.
 
+| Files | Format and use | Source and license |
+| --- | --- | --- |
+| [`fonts/release_guidance/`](fonts/release_guidance/meta.json) `rg_wenkai_*.c` | Eight LVGL 9 bitmap subsets (13–30 px, 4 bpp, uncompressed, Flash const) for the Release Guidance app; each `.chars` file is the exact glyph inventory generated from `tools/release_guidance/rg_spec.py`. Regenerate with `tools/release_guidance/gen_fonts.sh` (lv_font_conv 1.5.3). | Derived from LXGW WenKai Regular, SIL OFL 1.1 ([`LICENSE.txt`](fonts/release_guidance/LICENSE.txt)). |
+
 ## Images
 
 Store reusable source images and generated display assets in `images/`.
@@ -41,3 +45,7 @@ Store reusable music and sound-effect sources in `music/`.
 - Prefer 16 kHz, 16-bit mono PCM when it matches the current BSP audio path.
 - Check Flash and internal-RAM cost before embedding audio; stream or chunk long recordings.
 - Do not commit media without redistribution permission.
+
+| Files | Format and use | Source and license |
+| --- | --- | --- |
+| `music/release_guidance/snd_{A_droplet,B_bell,C_marimba}.wav` | 24 kHz, 16-bit mono PCM reference phrases (three taps, then the two-note confirm). `tools/release_guidance/gen_assets.py` slices one tap and the confirm phrase from each and embeds them at 0.6 gain in `main/rg/rg_sound_data.c` (about 98 KB Flash). 24 kHz keeps the bell overtones below Nyquist. | Synthesized for this project by the classic-shell fork authors, 2026-10-31. |

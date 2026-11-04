@@ -1,0 +1,7 @@
+# Large generated C arrays (fonts, pre-rendered art): collapse in diffs
+# and keep them out of language statistics. Regenerate with the tools/ scripts.
+assets/fonts/**/*.c linguist-generated=true
+main/classic/cs_assets.c linguist-generated=true
+main/classic/cs_astro_art.c linguist-generated=true
+main/classic/cs_mines_art.c linguist-generated=true
+main/rg/rg_images.c linguist-generated=true

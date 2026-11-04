@@ -15,6 +15,10 @@
 - 添加字库前评估 Flash 与内部 RAM 影响；ESP32-C3 无 PSRAM。
 - 不提交许可不允许分发的字库。
 
+| 文件 | 格式与用途 | 来源与许可 |
+| --- | --- | --- |
+| [`fonts/release_guidance/`](fonts/release_guidance/meta.json) `rg_wenkai_*.c` | 释放引导应用的 8 个 LVGL 9 位图子集（13–30 px，4 bpp，不压缩，Flash 常量）；每个 `.chars` 是由 `tools/release_guidance/rg_spec.py` 生成的确切字形清单。用 `tools/release_guidance/gen_fonts.sh`（lv_font_conv 1.5.3）重新生成。 | 派生自霞鹜文楷 LXGW WenKai Regular，SIL OFL 1.1（[`LICENSE.txt`](fonts/release_guidance/LICENSE.txt)）。 |
+
 ## 图片（images）
 
 可复用的源图与生成的显示资产放在 `images/`。
@@ -39,3 +43,7 @@
 - 与当前 BSP 音频路径匹配时优先采用 16 kHz、16 位单声道 PCM。
 - 嵌入音频前评估 Flash 与内部 RAM 成本；长录音应流式或分块。
 - 无再分发许可不提交媒体文件。
+
+| 文件 | 格式与用途 | 来源与许可 |
+| --- | --- | --- |
+| `music/release_guidance/snd_{A_droplet,B_bell,C_marimba}.wav` | 24 kHz、16 位单声道 PCM 参考样音（三声单击，再接两声上行确认）。`tools/release_guidance/gen_assets.py` 从每个文件截取一声单击和确认乐句，按 0.6 增益嵌入 `main/rg/rg_sound_data.c`（约 98 KB Flash）。采用 24 kHz 是为了让风铃泛音低于奈奎斯特频率。 | 由经典系统分支的作者为本项目合成，2026-10-31。 |

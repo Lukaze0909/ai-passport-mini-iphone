@@ -153,6 +153,12 @@ static esp_err_t audio_disable_i2s_channels(void) {
         {s_rx, "RX"},
     };
 
+    // After the codec is deleted the channels are usually already stopped:
+    // disable() then returns INVALID_STATE (handled below), but the driver logs
+    // it as an error first ("the channel has not been enabled yet"), twice per
+    // format change. Mute that tag for these two calls only.
+    const esp_log_level_t i2s_level = esp_log_level_get("i2s_common");
+    esp_log_level_set("i2s_common", ESP_LOG_NONE);
     for (size_t i = 0; i < sizeof(channels) / sizeof(channels[0]); i++) {
         if (!channels[i].channel) continue;
         esp_err_t e = i2s_channel_disable(channels[i].channel);
@@ -163,6 +169,7 @@ static esp_err_t audio_disable_i2s_channels(void) {
             if (first_error == ESP_OK) first_error = e;
         }
     }
+    esp_log_level_set("i2s_common", i2s_level);
     return first_error;
 }
 
