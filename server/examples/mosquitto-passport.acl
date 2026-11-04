@@ -1,0 +1,5 @@
+# The device (username = PASSPORT_DEVICE_ID) may only use its own topics.
+pattern readwrite passport/%u/#
+# The gateway and passportctl.
+user passport-gateway
+topic readwrite passport/#

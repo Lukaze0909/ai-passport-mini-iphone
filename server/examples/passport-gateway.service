@@ -1,0 +1,22 @@
+# /etc/systemd/system/passport-gateway.service — example unit, adjust paths and user.
+[Unit]
+Description=AI Passport Mini iPhone gateway
+After=network-online.target mosquitto.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=passport
+WorkingDirectory=/srv/passport/server
+Environment=PASSPORT_ENV_FILE=/srv/passport/server/.env
+ExecStart=/srv/passport/server/.venv/bin/python /srv/passport/server/gateway.py
+Restart=always
+RestartSec=5
+# The gateway only needs its state dir writable.
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/srv/passport/server/state
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

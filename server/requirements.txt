@@ -1,0 +1,4 @@
+paho-mqtt>=2.0
+# local speech-to-text (PASSPORT_ASR=sensevoice)
+sherpa-onnx>=1.10
+numpy

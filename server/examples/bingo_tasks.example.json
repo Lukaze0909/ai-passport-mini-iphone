@@ -1,0 +1,70 @@
+{
+  "_comment": [
+    "Task pool for the daily Bingo card. Copy this file, edit it, and point BINGO_TASKS_FILE at your copy.",
+    "pool: LABEL -> meaning. Labels are shown on the device: printable ASCII, at most 8 characters, each word at most 5 characters (a word must fit a 42 px cell in the 12 px device font), no comma, quote or backslash; a label wraps at its space. Meanings are only shown to the companion.",
+    "The pool needs at least 30 labels so a 5x5 card plus re-rolls never runs dry.",
+    "fixed: labels that are on every card.",
+    "auto: labels the server can tick from check-in events (PASSPORT_CHECKINS_FILE), label -> rule. Rules: up_before_10, bed_before_1, slept_7h, went_out.",
+    "checkin_tags: which tag in the check-in file means getting up / going to bed / going out.",
+    "fallback_whispers: used when the companion wrote no whisper for the day before the first line is completed (printable ASCII, <= 80 chars)."
+  ],
+  "pool": {
+    "WATER": "drank enough water",
+    "VEG": "ate fruit or vegetables",
+    "MEALS": "ate meals at regular times",
+    "NO SODA": "skipped sugary drinks",
+    "TEA": "had a warm drink instead of coffee",
+    "UP<10": "got up before 10:00",
+    "BED<1": "in bed by 01:00",
+    "SLEPT": "slept at least 7 hours",
+    "BATH": "showered",
+    "TEETH": "brushed and flossed",
+    "EYES": "rested the eyes away from screens",
+    "OUT": "went outside",
+    "SUN": "got some daylight",
+    "WALK": "walked 10 minutes",
+    "STRCH": "stretched",
+    "MOVE": "exercised for 20 minutes",
+    "NO SIT": "never sat more than 1 hour at a time",
+    "DISH": "did the dishes",
+    "TRASH": "took the trash out",
+    "LNDRY": "did laundry",
+    "TIDY": "tidied one spot",
+    "PLANT": "watered the plants",
+    "SHEET": "changed the sheets",
+    "CALM": "five minutes of slow breathing",
+    "3 GOOD": "wrote down three good things",
+    "PROUD": "noticed something to be proud of",
+    "LESS SCR": "less scrolling than usual",
+    "READ": "read or listened to something",
+    "LEARN": "learned one new thing",
+    "DIARY": "wrote a few lines in a journal",
+    "1 PLAN": "did one planned thing",
+    "TMRW": "planned tomorrow",
+    "REPLY": "answered a message that was waiting",
+    "MADE": "made something",
+    "FAM": "contacted family",
+    "PAL": "talked to a friend",
+    "GAME OK": "played games in moderation",
+    "LAUGH": "laughed out loud"
+  },
+  "fixed": ["WATER", "MEALS", "UP<10", "BED<1"],
+  "auto": {
+    "UP<10": "up_before_10",
+    "BED<1": "bed_before_1",
+    "SLEPT": "slept_7h",
+    "OUT": "went_out"
+  },
+  "checkin_tags": {
+    "up": "wake",
+    "bed": "sleep",
+    "out": "out"
+  },
+  "fallback_whispers": [
+    "A whole line! I'm grinning at my screen. Proud of you.",
+    "Bingo! You took care of yourself today. That's my favourite thing.",
+    "Look at you go. Drink one more glass of water for me, ok?",
+    "Line complete. Gold star, and a nap if you want one.",
+    "You did it. Small things, every one of them counts."
+  ]
+}

@@ -1,0 +1,5 @@
+#!/bin/sh
+# Wrapper so the companion can call `passportctl ...` from anywhere.
+# Symlink it onto PATH; set PASSPORT_PYTHON to a venv's python if you use one.
+here=$(dirname "$(readlink -f "$0")")
+exec "${PASSPORT_PYTHON:-python3}" "$here/passportctl.py" "$@"
