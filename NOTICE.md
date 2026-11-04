@@ -38,6 +38,8 @@ made for this project are licensed under
 - `assets/music/` (`.wav` files, synthesised for this project)
 - generated artwork: icons, wallpapers, lock screen and app art produced by the scripts in
   `tools/classic/`, including the bitmaps baked into the firmware sources
+- `docs/images/`: README mock-ups (firmware renders composited onto the upstream
+  `docs/brand/` device photo, which stays under the upstream license)
 
 Attribution: "AI Passport Mini iPhone by Kahze & Wren".
 
